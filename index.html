@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Hak Warga Negara UUD 1945</title>
+    <style>
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .card { background: white; border-radius: 12px; padding: 30px; max-width: 600px; width: 100%; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        h2 { color: #1e3a8a; margin-top: 0; }
+        .option-btn { display: block; width: 100%; padding: 12px 15px; margin: 10px 0; background: #e2e8f0; border: none; border-radius: 8px; text-align: left; font-size: 16px; cursor: pointer; transition: 0.2s; }
+        .option-btn:hover { background: #cbd5e1; }
+        .correct { background: #22c55e !important; color: white; }
+        .wrong { background: #ef4444 !important; color: white; }
+        .explanation { background: #f1f5f9; border-left: 4px solid #3b82f6; padding: 12px; margin-top: 15px; font-size: 14px; color: #334155; display: none; }
+        .next-btn { margin-top: 20px; padding: 12px 24px; background: #2563eb; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; display: none; width: 100%; }
+        .score-box { text-align: center; }
+    </style>
+</head>
+<body>
+
+<div class="card" id="quiz-box">
+    <h2 id="question-text">Memuat pertanyaan...</h2>
+    <div id="options-container"></div>
+    <div class="explanation" id="explanation-box"></div>
+    <button class="next-btn" id="next-btn" onclick="nextQuestion()">Soal Selanjutnya ➡️</button>
+</div>
+
+<script>
+const questions = [
+    {
+        q: "Pasal berapakah dalam UUD 1945 yang menjamin bahwa setiap warga negara berhak atas pekerjaan dan penghidupan yang layak?",
+        options: ["Pasal 27 ayat (1)", "Pasal 27 ayat (2)", "Pasal 28A", "Pasal 31 ayat (1)"],
+        answer: 1,
+        exp: "Pasal 27 ayat (2) menyatakan bahwa tiap-tiap warga negara berhak atas pekerjaan dan penghidupan yang layak bagi kemanusiaan."
+    },
+    {
+        q: "Lembaga negara yang berwenang menguji undang-undang terhadap UUD 1945 untuk melindungi hak konstitusional warga negara adalah...",
+        options: ["Mahkamah Agung", "Mahkamah Konstitusi", "Komnas HAM", "DPR"],
+        answer: 1,
+        exp: "Berdasarkan Pasal 24C UUD 1945, Mahkamah Konstitusi (MK) bertugas mengadili dan menguji UU terhadap UUD 1945."
+    },
+    {
+        q: "Prinsip negara kesejahteraan (Welfare State) yang mengatur bahwa 'Fakir miskin dan anak terlantar dipelihara oleh negara' terdapat pada...",
+        options: ["Pasal 28H ayat (1)", "Pasal 31 ayat (2)", "Pasal 34 ayat (1)", "Pasal 30 ayat (1)"],
+        answer: 2,
+        exp: "Pasal 34 ayat (1) UUD 1945 mengamanatkan komitmen negara dalam memelihara fakir miskin dan anak-anak yang terlantar."
+    }
+];
+
+let currentQ = 0;
+let score = 0;
+
+function loadQuestion() {
+    const qData = questions[currentQ];
+    document.getElementById("question-text").innerText = `Soal ${currentQ + 1}: ${qData.q}`;
+    const optsBox = document.getElementById("options-container");
+    optsBox.innerHTML = "";
+    document.getElementById("explanation-box").style.display = "none";
+    document.getElementById("next-btn").style.display = "none";
+
+    qData.options.forEach((opt, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "option-btn";
+        btn.innerText = opt;
+        btn.onclick = () => checkAnswer(idx, btn);
+        optsBox.appendChild(btn);
+    });
+}
+
+function checkAnswer(selectedIdx, btn) {
+    const qData = questions[currentQ];
+    const allBtns = document.querySelectorAll(".option-btn");
+    allBtns.forEach(b => b.disabled = true);
+
+    if (selectedIdx === qData.answer) {
+        btn.classList.add("correct");
+        score++;
+    } else {
+        btn.classList.add("wrong");
+        allBtns[qData.answer].classList.add("correct");
+    }
+
+    const expBox = document.getElementById("explanation-box");
+    expBox.innerHTML = `<strong>Penjelasan:</strong> ${qData.exp}`;
+    expBox.style.display = "block";
+    document.getElementById("next-btn").style.display = "block";
+}
+
+function nextQuestion() {
+    currentQ++;
+    if (currentQ < questions.length) {
+        loadQuestion();
+    } else {
+        showScore();
+    }
+}
+
+function showScore() {
+    document.getElementById("quiz-box").innerHTML = `
+        <div class="score-box">
+            <h2>🎉 Kuis Selesai!</h2>
+            <p>Skor Anda: <strong>${score} / ${questions.length}</strong></p>
+            <button class="next-btn" style="display:block" onclick="location.reload()">Ulangi Kuis 🔄</button>
+        </div>
+    `;
+}
+
+loadQuestion();
+</script>
+
+</body>
+</html>
