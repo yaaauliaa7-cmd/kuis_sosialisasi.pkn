@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcard Hak Warga Negara UUD 1945</title>
+    <style>
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f8fafc; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .card-container { perspective: 1000px; width: 100%; max-width: 500px; height: 300px; cursor: pointer; }
+        .card { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.6s; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .card.flipped { transform: rotateY(180deg); }
+        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 16px; padding: 25px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        .card-front { background: #1e40af; color: white; }
+        .card-back { background: white; color: #1e293b; border: 2px solid #e2e8f0; transform: rotateY(180deg); }
+        .nav-btns { margin-top: 25px; display: flex; gap: 15px; }
+        button { padding: 10px 20px; border: none; background: #2563eb; color: white; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        button:disabled { background: #cbd5e1; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+
+<h2>🎴 Flashcard Hak Warga Negara (UUD 1945)</h2>
+<p style="color: #64748b;">Klik kartu untuk membalik dan melihat detail pasal!</p>
+
+<div class="card-container" onclick="flipCard()">
+    <div class="card" id="flashcard">
+        <div class="card-face card-front">
+            <h2 id="pasal-title">Pasal 27 ayat (1)</h2>
+            <p id="pasal-subtitle">Kesetaraan di Hadapan Hukum</p>
+        </div>
+        <div class="card-face card-back">
+            <p><strong>Bunyi:</strong> <span id="pasal-bunyi">...</span></p>
+            <p style="color: #2563eb;"><strong>Contoh:</strong> <span id="pasal-contoh">...</span></p>
+        </div>
+    </div>
+</div>
+
+<div class="nav-btns">
+    <button id="prev-btn" onclick="prevCard()" disabled>⬅️ Sebelumnya</button>
+    <span id="counter" style="align-self: center; font-weight: bold;">1 / 3</span>
+    <button id="next-btn" onclick="nextCard()">Selanjutnya ➡️</button>
+</div>
+
+<script>
+const cards = [
+    {
+        pasal: "Pasal 27 ayat (1)",
+        judul: "Kesetaraan Hukum & Pemerintahan",
+        bunyi: "Segala warga negara bersamaan kedudukannya di dalam hukum dan pemerintahan...",
+        contoh: "Perlakuan adil di pengadilan tanpa memandang status sosial dan hak pembelaan hukum."
+    },
+    {
+        pasal: "Pasal 27 ayat (2)",
+        judul: "Pekerjaan & Penghidupan Layak",
+        bunyi: "Tiap-tiap warga negara berhak atas pekerjaan dan penghidupan yang layak bagi kemanusiaan.",
+        contoh: "Kesempatan memperoleh lapangan kerja yang manusiawi dan imbalan kerja yang adil."
+    },
+    {
+        pasal: "Pasal 31 ayat (1)",
+        judul: "Hak Mendapatkan Pendidikan",
+        bunyi: "Setiap warga negara berhak mendapat pendidikan.",
+        contoh: "Hak mengakses fasilitas sekolah dasar hingga perguruan tinggi."
+    }
+];
+
+let currentCard = 0;
+
+function updateCard() {
+    const c = cards[currentCard];
+    document.getElementById("pasal-title").innerText = c.pasal;
+    document.getElementById("pasal-subtitle").innerText = c.judul;
+    document.getElementById("pasal-bunyi").innerText = c.bunyi;
+    document.getElementById("pasal-contoh").innerText = c.contoh;
+    document.getElementById("counter").innerText = `${currentCard + 1} / ${cards.length}`;
+    
+    document.getElementById("flashcard").classList.remove("flipped");
+    document.getElementById("prev-btn").disabled = currentCard === 0;
+    document.getElementById("next-btn").disabled = currentCard === cards.length - 1;
+}
+
+function flipCard() {
+    document.getElementById("flashcard").classList.toggle("flipped");
+}
+
+function prevCard() {
+    if (currentCard > 0) { currentCard--; updateCard(); }
+}
+
+function nextCard() {
+    if (currentCard < cards.length - 1) { currentCard++; updateCard(); }
+}
+
+updateCard();
+</script>
+
+</body>
+</html>
